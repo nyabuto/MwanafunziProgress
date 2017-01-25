@@ -1,0 +1,41 @@
+#data_content{
+   float: left;
+   clear: left;
+    width: auto;
+    border-radius: 10px;
+    border: 2px solid grey;
+margin-left: 50px;
+margin-top: 40px;
+}
+tr.spaceUnder > td
+{
+  padding-bottom: 0.5em;
+   padding-right: 8em;
+}
+
+tr.spaceMenu > td
+{
+  padding-bottom: 0.5em;
+   padding-right: 3em;
+}
+
+tr.spaceSubject > td
+{
+  padding-bottom: 0.2em;
+  padding-top: 0.1em;
+   padding-right: 0.1em;
+}
+
+tr.spaceInName > td
+{
+   padding-right: 1em;
+}
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
