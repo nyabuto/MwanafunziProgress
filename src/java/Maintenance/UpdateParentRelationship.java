@@ -33,14 +33,24 @@ String relationship_id,relationship_name,output;
             
             relationship_id=request.getParameter("id");
             relationship_name=request.getParameter("name");
+            String checker="SELECT reltionship_id FROM parent_relationships WHERE relationship_name=?";
+            conn.pst=conn.conn.prepareStatement(checker);
+            conn.pst.setString(1, relationship_name);
             
+            conn.rs=conn.pst.executeQuery();
+            if(conn.rs.next()){
+//                record already exist
+                  output="Relationship already exist.";
+            }
+            else{
             String updator="UPDATE parent_relationships SET relationship_name=? WHERE relationships_id=?";
             conn.pst=conn.conn.prepareStatement(updator);
             conn.pst.setString(1, relationship_id);
             conn.pst.setString(2, relationship_name);
             
             conn.pst.executeUpdate();
-            
+            output="Relationship updated successfully.";
+            }
             out.println(output);
         }
     }

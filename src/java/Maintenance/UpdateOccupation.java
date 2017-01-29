@@ -34,7 +34,16 @@ String occupation_id,occupation_name,output;
            
             occupation_id=request.getParameter("id");
             occupation_name=request.getParameter("name");
+            String checker="SELECT occupation_id FROM occupation WHERE occupation_name=?";
+            conn.pst=conn.conn.prepareStatement(checker);
+            conn.pst.setString(1, occupation_name);
 
+            conn.rs=conn.pst.executeQuery();
+            if(conn.rs.next()){
+            //    already exist
+            output="Occupation already exist.";
+            }
+            else{
             String updator="UPDATE occupation SET occupation_name=? WHERE occupation_id=?";
             conn.pst=conn.conn.prepareStatement(updator);
             conn.pst.setString(1, occupation_name);
@@ -42,7 +51,8 @@ String occupation_id,occupation_name,output;
 
             conn.pst.executeUpdate();
             output="Occupation updated successfully.";
-
+            }
+            
             out.println(output);
         }
     }

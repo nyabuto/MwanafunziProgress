@@ -41,6 +41,7 @@ String exam_id;
          year=request.getParameter("year");
          
          exam_id=rand.current_id();
+         
          String checkExistence="SELECT exam_id FROM exams WHERE year=? AND term_id=? AND title_id=?";
          conn.pst=conn.conn.prepareStatement(checkExistence);
          conn.pst.setString(1, year);

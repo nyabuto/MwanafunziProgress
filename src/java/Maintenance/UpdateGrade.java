@@ -36,6 +36,19 @@ String output;
             grade=request.getParameter("grade");
             points_id=request.getParameter("points_id");
             
+            //            check existence of similar record
+        String checker="SELECT points_id FROM points WHERE points=? OR grade=?";
+        conn.pst=conn.conn.prepareStatement(checker);
+        conn.pst.setString(1, points);
+        conn.pst.setString(2, grade);
+
+        conn.rs=conn.pst.executeQuery();
+        if(conn.rs.next()){
+        //    record exist
+        output="Grade already set.";
+        }
+        else{
+    
             String updator="UPDATE points SET points=?, grade=? WHERE points_id=?";
             conn.pst=conn.conn.prepareStatement(updator);
             conn.pst.setString(1, points);
@@ -43,6 +56,8 @@ String output;
             conn.pst.setString(3, points_id);
             
             conn.pst.executeUpdate();
+            output="Grade updated successfully.";
+        }
             out.println(output);
         }
     }

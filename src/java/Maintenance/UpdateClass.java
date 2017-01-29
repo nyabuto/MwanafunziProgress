@@ -35,12 +35,22 @@ String id,name,output;
             id=request.getParameter("id");
             name=request.getParameter("name");
             
+            String checker="SELECT id FROM classes WHERE name=?";
+     conn.pst=conn.conn.prepareStatement(checker);
+     conn.pst.setString(1, name);
+     conn.rs=conn.st.executeQuery(checker);
+     if(conn.rs.next()){
+         output="Class already exist";
+         
+     }
+     else{
             String updater="UPDATE classes SET name=? WHERE id=?";
             conn.pst=conn.conn.prepareStatement(updater);
             conn.pst.setString(1, name);
             conn.pst.setString(2, id);
             conn.pst.executeUpdate();
             output="Class updated successfully.";
+     }
             out.println(output);
         }
     }

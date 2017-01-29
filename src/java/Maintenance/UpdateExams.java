@@ -37,6 +37,18 @@ String exam_id,term_id,class_id,year;
            term_id=request.getParameter("term_id");
            exam_id=request.getParameter("exam_id");
            
+           String checkExistence="SELECT exam_id FROM exams WHERE year=? AND term_id=?";
+         conn.pst=conn.conn.prepareStatement(checkExistence);
+         conn.pst.setString(1, year);
+         conn.pst.setString(2, term_id);
+         
+         conn.rs=conn.pst.executeQuery();
+         if(conn.rs.next()){
+          output="Similar record exist";   
+         }
+         else{
+             
+         
            String updater="UPDATE exams SET year=?,class_id=?,term_id=? WHERE exam_id=?";
            conn.pst=conn.conn.prepareStatement(updater);
            conn.pst.setString(1, year);
@@ -45,6 +57,7 @@ String exam_id,term_id,class_id,year;
            conn.pst.setString(4, exam_id);
            
            conn.pst.executeUpdate();
+         }
             out.println(output);
         }
     }

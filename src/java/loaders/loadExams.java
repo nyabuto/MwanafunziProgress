@@ -36,9 +36,10 @@ int counter;
             current_year=Calendar.getInstance().get(Calendar.YEAR);
             output="";
           String getData="SELECT exams.exam_id AS exam_id, exams.year AS year, exam_titles.title_name AS title_name,"
-                  + "school_terms.term_name AS term "
+                  + "terms.term_name AS term "
                   + "FROM exams LEFT JOIN exam_titles ON exams.title_id=exam_titles.title_id "
                   + "LEFT JOIN school_terms ON exams.term_id=school_terms.term_id "
+                  + "LEFT JOIN terms ON school_terms.term_name_id=terms.term_id "
                   + "WHERE exams.year=? "
                   + "ORDER BY exam_id DESC LIMIT 5";
           conn.pst = conn.conn.prepareStatement(getData);

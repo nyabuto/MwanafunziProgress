@@ -35,6 +35,16 @@ String title,id,output;
             id=request.getParameter("id");
             title=request.getParameter("title");
             
+            //            CHECK TITLE
+        String checker="SELECT title_id FROM exam_titles WHERE title_name=?";
+        conn.pst=conn.conn.prepareStatement(checker);
+        conn.pst.setString(1, title);
+        conn.rs=conn.pst.executeQuery();
+        if(conn.rs.next()){
+        //    title already exist
+        output="Similar records exist";
+        }
+        else{
             String updator="UPDATE exam_titles SET title_name=? WHERE title_id=?";
             conn.pst=conn.conn.prepareStatement(updator);
             conn.pst.setString(1, id);
@@ -42,6 +52,7 @@ String title,id,output;
             
             conn.pst.executeUpdate();
             output="Exam title updated successfully.";
+        }
             out.println(output);
         }
     }

@@ -46,6 +46,7 @@ conn.pst.setString(2, grade);
 conn.rs=conn.pst.executeQuery();
 if(conn.rs.next()){
 //    record exist
+output="Similar record exist";
 }
 else{
 //    add as new record

@@ -34,7 +34,14 @@ String output,mode_id,mode_name;
             mode_id=request.getParameter("mode_id");
             mode_name=request.getParameter("mode_name");
             
-            
+            String checker="SELECT id FROM payment_modes WHERE mode=?";
+           conn.pst=conn.conn.prepareStatement(checker);
+           conn.pst.setString(1, mode_name);
+           conn.rs=conn.pst.executeQuery();
+           if(conn.rs.next()){
+             output="Payment mode already exist";  
+           }
+           else{
             String updator="UPDATE payment_modes SET mode=? WHERE id=?";
                conn.pst=conn.conn.prepareStatement(updator);
                conn.pst.setString(1, mode_name);
@@ -42,7 +49,7 @@ String output,mode_id,mode_name;
                conn.pst.executeUpdate();
                
                output="Payment mode updated successfully.";
-               
+           }   
             out.println(output);
         }
     }
