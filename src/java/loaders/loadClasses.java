@@ -28,7 +28,7 @@ String output="";
         try (PrintWriter out = response.getWriter()) {
             dbConn conn = new dbConn();
             
-         output="<option value=\"\">Choose class<option>";
+         output="<option value=\"\">Choose class</option>";
          String getData="SELECT id,name FROM classes";
          conn.pst = conn.conn.prepareStatement(getData);
          conn.rs=conn.pst.executeQuery();

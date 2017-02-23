@@ -33,31 +33,33 @@ String class_name,id;
         try (PrintWriter out = response.getWriter()) {
             session = request.getSession();
             dbConn conn = new dbConn();
-            IDGenerator rand = new IDGenerator();
-            class_name=request.getParameter("");
+            class_name=request.getParameter("class_name");
             
 //            check existence
-
+if(!class_name.equals("") || class_name.length()<=1){
 String checker="SELECT id FROM classes WHERE name=?";
 conn.pst=conn.conn.prepareStatement(checker);
 conn.pst.setString(1, class_name);
-     conn.rs=conn.st.executeQuery(checker);
+     conn.rs=conn.pst.executeQuery();
      if(conn.rs.next()){
-         output="Class already exist";
+         output="<font color=\"red\"><b>Class already exist.</b></font>";
          
      }
      else{
-         id=rand.current_id();
-         String adder="INSERT INTO classes (id,name) VALUES(?,?)";
+         String adder="INSERT INTO classes (name) VALUES(?)";
          conn.pst=conn.conn.prepareStatement(adder);
-         conn.pst.setString(1, id);
-         conn.pst.setString(2, class_name);
+         conn.pst.setString(1, class_name);
          
          conn.pst.executeUpdate();
-         output="Class added successfully.";
+         output="<font color=\"green\"><b>Class added successfully.</b></font>";
      }
+}
+else{
+    output="<font color=\"red\"><b>Error: No class entered or length is unacceptable.</b></font>";
+}
             out.println(output);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

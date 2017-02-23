@@ -26,7 +26,6 @@ public class NewExams extends HttpServlet {
 HttpSession session;
 String output;
 String title_id,term_id,year;
-String exam_id;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
@@ -40,7 +39,6 @@ String exam_id;
          term_id=request.getParameter("term_id");
          year=request.getParameter("year");
          
-         exam_id=rand.current_id();
          
          String checkExistence="SELECT exam_id FROM exams WHERE year=? AND term_id=? AND title_id=?";
          conn.pst=conn.conn.prepareStatement(checkExistence);
@@ -50,17 +48,16 @@ String exam_id;
          
          conn.rs=conn.pst.executeQuery();
          if(conn.rs.next()){
-          output="Similar record exist";   
+          output="<font color=\"red\"><b>Similar record exist.</b></font>";   
          }
          else{
-             String addexam="INSERT INTO exams (exam_id,year,term_id,title_id) VALUES(?,?,?,?)";
+             String addexam="INSERT INTO exams (year,term_id,title_id) VALUES(?,?,?)";
              conn.pst=conn.conn.prepareCall(addexam);
-             conn.pst.setString(1, exam_id);
-             conn.pst.setString(2, year);
-             conn.pst.setString(3, term_id);
-             conn.pst.setString(4, title_id);
+             conn.pst.setString(1, year);
+             conn.pst.setString(2, term_id);
+             conn.pst.setString(3, title_id);
              conn.pst.executeUpdate();
-             output="Exam added successfully";
+             output="<font color=\"green\"><b>Exam added successfully.</b></font>";
          }
             out.println(output);
         }

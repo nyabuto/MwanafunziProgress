@@ -72,6 +72,19 @@
              
              </ul>
         </li>
+        <li class="header"><b>MANAGEMENT</b></li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>Manage Entries</span>
+            <span class="label label-primary pull-right">3</span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a href="#"><i class="fa fa-circle"></i>Management</a></li>
+             
+             </ul>
+            
+        </li>
         
         <li class="header"><b>REPORTS MODULE</b></li>
         <li class="treeview">

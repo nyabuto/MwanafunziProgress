@@ -45,7 +45,7 @@ int year,prev_year;
               conn.pst=conn.conn.prepareStatement(inserter);
               conn.pst.setInt(1, year);
               conn.pst.executeUpdate();
-              output="Base year set successfully.";
+              output="<font color=\"green\"><b>Base year set successfully.</b></font>";
           }
           else{
             String updater="UPDATE base_year SET year=? WHERE year=?";
@@ -53,7 +53,7 @@ int year,prev_year;
             conn.pst.setInt(1, year);
             conn.pst.setInt(2, prev_year);
             conn.pst.executeUpdate();
-            output="Base year updated successfully";
+            output="<font color=\"blue\"><b>Base year updated successfully.</b></font>";
           }
             out.println(output);
         }

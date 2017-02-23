@@ -25,17 +25,15 @@ import javax.servlet.http.HttpSession;
 public class NewExamTitle extends HttpServlet {
 HttpSession session;
 String output;
-String title_name,title_id;
+String title_name;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
          session=request.getSession();
          dbConn conn = new dbConn();
-         IDGenerator rand = new IDGenerator();
             
-            title_name=request.getParameter("title_name");
-            title_id=rand.current_id();
+            title_name=request.getParameter("exam_title_name");
             
 //            CHECK TITLE
 String checker="SELECT title_id FROM exam_titles WHERE title_name=?";
@@ -47,10 +45,9 @@ if(conn.rs.next()){
 output="Similar records exist";
 }
 else{
-    String add_title="INSERT INTO exam_titles (title_id,title_name) VALUES(?,?)";
+    String add_title="INSERT INTO exam_titles (title_name) VALUES(?)";
     conn.pst=conn.conn.prepareStatement(add_title);
-    conn.pst.setString(1, title_id);
-    conn.pst.setString(2, title_name);
+    conn.pst.setString(1, title_name);
     conn.pst.executeUpdate();
     output="Exam title added successfully.";
 }

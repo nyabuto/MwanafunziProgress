@@ -32,8 +32,8 @@ String title,id,output;
             session=request.getSession();
             dbConn conn= new dbConn();
             
-            id=request.getParameter("id");
-            title=request.getParameter("title");
+            id=request.getParameter("exam_title_name");
+            title=request.getParameter("exam_title_id");
             
             //            CHECK TITLE
         String checker="SELECT title_id FROM exam_titles WHERE title_name=?";
@@ -42,7 +42,7 @@ String title,id,output;
         conn.rs=conn.pst.executeQuery();
         if(conn.rs.next()){
         //    title already exist
-        output="Similar records exist";
+        output="<font color=\"red\"><b>Similar records exist.</b></font>";
         }
         else{
             String updator="UPDATE exam_titles SET title_name=? WHERE title_id=?";
@@ -51,7 +51,7 @@ String title,id,output;
             conn.pst.setString(2, title);
             
             conn.pst.executeUpdate();
-            output="Exam title updated successfully.";
+            output="<font color=\"green\"><b>Exam title updated successfully.</b></font>";
         }
             out.println(output);
         }

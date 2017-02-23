@@ -3,7 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/NetBeansProjects/MwanafunziProgress/src/java/Maintenance/NewSchoolTerms.java</file>
+            <file>file:/G:/NetBeansProjects/MwanafunziProgress/web/Management.jsp</file>
+            <file>file:/G:/NetBeansProjects/MwanafunziProgress/src/java/MwanafunziProgress/ViewStudents.java</file>
+            <file>file:/G:/NetBeansProjects/MwanafunziProgress/src/java/Maintenance/LoadExams.java</file>
+            <file>file:/G:/NetBeansProjects/MwanafunziProgress/src/java/Maintenance/LoadExamTitles.java</file>
+            <file>file:/G:/NetBeansProjects/MwanafunziProgress/src/java/Maintenance/LoadClasses.java</file>
+            <file>file:/G:/NetBeansProjects/MwanafunziProgress/src/java/Maintenance/LoadStreams.java</file>
+            <file>file:/G:/NetBeansProjects/MwanafunziProgress/web/Students.jsp</file>
         </group>
     </open-files>
 </project-private>

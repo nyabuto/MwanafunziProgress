@@ -32,15 +32,17 @@ String id,name,output;
             session = request.getSession();
             dbConn conn = new dbConn();
             
-            id=request.getParameter("id");
-            name=request.getParameter("name");
-            
-            String checker="SELECT id FROM classes WHERE name=?";
+            id=request.getParameter("class_id");
+            name=request.getParameter("class_name");
+     name=name.trim();
+     
+     if(!name.equals("")){
+    String checker="SELECT id FROM classes WHERE name=?";
      conn.pst=conn.conn.prepareStatement(checker);
      conn.pst.setString(1, name);
-     conn.rs=conn.st.executeQuery(checker);
+     conn.rs=conn.pst.executeQuery();
      if(conn.rs.next()){
-         output="Class already exist";
+         output="<font color=\"red\"><b>Class already exist</b></font>";
          
      }
      else{
@@ -49,7 +51,11 @@ String id,name,output;
             conn.pst.setString(1, name);
             conn.pst.setString(2, id);
             conn.pst.executeUpdate();
-            output="Class updated successfully.";
+            output="<font color=\"blue\"><b>Class updated successfully.</b></font>";
+     }
+     }
+     else{
+         output="<font color=\"red\"><b>Error: Ensure class name has more than 1 character.</b></font>";
      }
             out.println(output);
         }
