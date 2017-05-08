@@ -80,7 +80,7 @@
             <span class="label label-primary pull-right">3</span>
           </a>
           <ul class="treeview-menu">
-              <li><a href="#"><i class="fa fa-circle"></i>Management</a></li>
+              <li><a href="Management.jsp"><i class="fa fa-circle"></i>Management</a></li>
              
              </ul>
             

@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
  */
 public class NewGrade extends HttpServlet {
 HttpSession session;
-String points_id,points,grade;
+String points,grade;
 String output;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -32,11 +32,11 @@ String output;
         try (PrintWriter out = response.getWriter()) {
             session=request.getSession();
             dbConn conn = new dbConn();
-            IDGenerator rand = new IDGenerator();
+           
             
             points=request.getParameter("points");
             grade=request.getParameter("grade");
-            
+            grade=grade.replace("_", "+");
 //            check existence of similar record
 String checker="SELECT points_id FROM points WHERE points=? OR grade=?";
 conn.pst=conn.conn.prepareStatement(checker);
@@ -50,12 +50,11 @@ output="Similar record exist";
 }
 else{
 //    add as new record
-points_id=rand.current_id();
-String inserter="INSERT INTO points (points_id,points,grade) VALUES(?,?,?)";
+String inserter="INSERT INTO points (points,grade) VALUES(?,?)";
 conn.pst=conn.conn.prepareStatement(inserter);
-conn.pst.setString(1, points_id);
-conn.pst.setString(2, points);
-conn.pst.setString(3, grade);
+conn.pst.setString(1, points);
+conn.pst.setString(2, grade);
+conn.pst.executeUpdate();
 output="Grade set successfully.";
 }
 

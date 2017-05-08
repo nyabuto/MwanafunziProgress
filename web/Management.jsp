@@ -73,6 +73,9 @@
              <td>
                 <button style="margin-left:0%; width: auto;" class="btn btn-success btn-lg" id="exams">Exams</button>
             </td> 
+             <td>
+                <button style="margin-left:0%; width: auto;" class="btn btn-success btn-lg" id="grades">Grades</button>
+            </td> 
             </tr>
      </table>
         <div id="main_content">
@@ -292,6 +295,60 @@
   </div>
 </div>
 
+      
+  <!--MODAL ADD GRADE-->
+  <div class="modal fade" id="new_grade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="images/close.png" width="30px" height="30px" alt="X"></button>
+        <h4 class="modal-title" id=""><p style="text-align: center; color:blue; font-weight: bolder;">ADD NEW GRADE.</p></h4>
+      </div>
+      <div class="modal-body" id="">
+    <form action="#" method="POST" style="margin-left: 24%; margin-right: 100px; margin-top: 20px; margin-bottom: 40px;">
+    <!--    data here-->
+    
+    <input type="text" name="points" placeholder="1 , 2, 4 ... etc"  class="form-control" id="points" required="true" maxlength="50" style="width:300px;">      
+               
+    <br><br>
+    <input type="text" name="grade" placeholder="A, A-,B+... etc"  class="form-control" id="grade" required="true" maxlength="50" style="width:300px;">      
+               
+    <br><br>
+    <button type="button" class="btn btn-block btn-success" id="add_grade" style="height:40px; width: 200px; margin-left: 12%;"><b>Add Grade.</b></button>
+     
+    <!--end of data-->
+    </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!--MODAL EDIT GRADES-->
+  <div class="modal fade" id="edit_grades" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="images/close.png" width="30px" height="30px" alt="X"></button>
+        <h4 class="modal-title" id=""><p style="text-align: center; color:blue; font-weight: bolder;">EDIT GRADE.</p></h4>
+      </div>
+      <div class="modal-body" id="">
+    <form action="#" method="POST" style="margin-left: 24%; margin-right: 100px; margin-top: 20px; margin-bottom: 40px;">
+    <!--    data here-->
+    
+    <input type="text" name="edit_points" placeholder="12, 11 ... etc"  class="form-control" id="edit_points" required="true" maxlength="50" style="width:300px;">      
+               
+    <br><br>
+    <input type="text" name="edit_grade" placeholder="A etc"  class="form-control" id="edit_grade" required="true" maxlength="50" style="width:300px;">      
+               
+    <br><br>
+    <button type="button" class="btn btn-block btn-success" id="update_grade" style="height:40px; width: 200px; margin-left: 12%;"><b>Edit Grade.</b></button>
+     
+    <!--end of data-->
+    </form>
+      </div>
+    </div>
+  </div>
+</div>
     
   <!-- /.content-wrapper -->
   <input type="hidden" readonly="true" id="se_id" value="">
@@ -379,6 +436,15 @@ $("#save_class").click(function(){
   $("#save_exam").click(function(){
    saveExams();
   }); 
+    $("#grades").click(function(){
+   loadGrades();
+  }); 
+  $("#add_grade").click(function(){
+   saveGrade();
+  }); 
+  $("#update_grade").click(function(){
+   updateGrade();
+  });
     });
     
 //  Base year+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++BASE YEAR  
@@ -647,6 +713,61 @@ loadExams();
     }
         });    
     }
+    
+
+//    end of exam titles
+
+   
+    function loadGrades(){
+   $.ajax({
+        url:'LoadGrades',
+        type:"post",
+        dataType:"html",
+        success:function(grades){
+        $("#main_content").html(grades);
+        $("#example1").DataTable();
+        $("#add_grade").click(function(){    
+        $('#new_grade').modal(); 
+    });
+        }    
+    });    
+   }
+   
+   function  saveGrade(){
+    var points=$("#points").val();
+    var grade=$("#grade").val();
+    grade=grade.replace(" ","%20");
+    grade=grade.replace("+","_");
+   $.ajax({
+        url:'NewGrade?points='+points+'&&grade='+grade,
+        type:"post",
+        dataType:"html",
+        success:function(output){
+$('#new_grade').modal('hide');
+$.notify(output, {type:"info"});
+loadGrades();
+        }    
+    });
+   }
+          
+    function updateGrade(){
+    var points_id=$("#se_id").val();
+    var points=$("#edit_points").val();
+    var grade=$("#edit_grade").val();
+    grade=grade.replace(" ","%20");
+    grade=grade.replace("+","_");
+   $.ajax({
+        url:'UpdateGrade?points_id='+points_id+'&&points='+points+'&&grade='+grade,
+        type:"post",
+        dataType:"html",
+        success:function(output){
+            $('#edit_grades').modal('hide');
+            $.notify(output, {type:"info"});
+            loadGrades();
+        }    
+    });    
+    }
+ 
     </script>
     <script type="text/javascript">
     $("#base_year").click(function(){
@@ -734,6 +855,28 @@ loadExams();
         }    
     });
       }
+      
+     function updator_grade(pos){
+      var points=$("#points_"+pos).html();
+      var grade=$("#grade_"+pos).html();
+      $("#edit_points").val(points);
+      $("#edit_grade").val(grade);
+      $("#se_id").val($("#ival_"+pos).val());
+      $("#edit_grades").modal();
+      } 
+     function deleter_grade(pos){
+      var points_id=$("#ival_"+pos).val();
+      $.ajax({
+        url:'DeleteGrade?points_id='+points_id,
+        type:"post",
+        dataType:"html",
+        success:function(output){
+            $.notify(output, {type:"info"});
+            loadGrades();
+        }    
+    });
+      }
+      
     </script>
     
     

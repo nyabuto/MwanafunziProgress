@@ -21,46 +21,36 @@ import javax.servlet.http.HttpSession;
  *
  * @author mwamb
  */
-public class UpdateGrade extends HttpServlet {
-HttpSession session;
-String points_id,points,grade;
-String output;
+public class DeleteGrade extends HttpServlet {
+    HttpSession session;
+    String points_id,output;
+    int counter;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-          session=request.getSession();
             dbConn conn = new dbConn();
             
-            points=request.getParameter("points");
-            grade=request.getParameter("grade");
             points_id=request.getParameter("points_id");
-            grade=grade.replace("_", "+");
             
-            System.out.println("points id : "+points_id+" points="+points+" grade :"+grade);   
-            //            check existence of similar record
-        String checker="SELECT points_id FROM points WHERE (points=? OR grade=?) AND points_id!=?";
-        conn.pst=conn.conn.prepareStatement(checker);
-        conn.pst.setString(1, points);
-        conn.pst.setString(2, grade);
-        conn.pst.setString(3, points_id);
-
-        conn.rs=conn.pst.executeQuery();
-        if(conn.rs.next()){
-        //    record exist
-        output="<font color=\"red\"><b>ERROR: Grade already set.</b></font>";
-        }
-        else{
-    
-            String updator="UPDATE points SET points=?, grade=? WHERE points_id=?";
-            conn.pst=conn.conn.prepareStatement(updator);
-            conn.pst.setString(1, points);
-            conn.pst.setString(2, grade);
-            conn.pst.setString(3, points_id);
-            
-            conn.pst.executeUpdate();
-            output="<font color=\"green\"><b>Grade updated successfully.</b></font>";
-        }
+            counter=0;
+            String checker="SELECT COUNT(range_id) FROM marks_ranges WHERE points_id=?";
+            conn.pst=conn.conn.prepareStatement(checker);
+            conn.pst.setString(1, points_id);
+            conn.rs=conn.pst.executeQuery();
+            if(conn.rs.next()){
+            counter=conn.rs.getInt(1);
+            }
+            if(counter==0){
+                String deleter="DELETE FROM points WHERE points_id=?";
+                conn.pst=conn.conn.prepareStatement(deleter);
+                conn.pst.setString(1, points_id);
+                conn.pst.executeUpdate();
+                output="<font color=\"green\"><b>Record deleted successfuly.</b></font>";
+            }
+            else{
+              output="<font color=\"red\"><b>Error: Record already associated with range.</b></font>";   
+            }
             out.println(output);
         }
     }
@@ -77,11 +67,11 @@ String output;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    try {
-        processRequest(request, response);
-    } catch (SQLException ex) {
-        Logger.getLogger(UpdateGrade.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeleteGrade.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -95,11 +85,11 @@ String output;
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    try {
-        processRequest(request, response);
-    } catch (SQLException ex) {
-        Logger.getLogger(UpdateGrade.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeleteGrade.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

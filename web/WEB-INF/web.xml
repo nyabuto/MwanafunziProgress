@@ -348,6 +348,14 @@
         <servlet-name>loadExamTitles</servlet-name>
         <servlet-class>loaders.loadExamTitles</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LoadGrades</servlet-name>
+        <servlet-class>Maintenance.LoadGrades</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteGrade</servlet-name>
+        <servlet-class>Maintenance.DeleteGrade</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loadClasses</servlet-name>
         <url-pattern>/loadClasses</url-pattern>
@@ -696,9 +704,15 @@
         <servlet-name>loadExamTitles</servlet-name>
         <url-pattern>/loadExamTitles</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadGrades</servlet-name>
+        <url-pattern>/LoadGrades</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteGrade</servlet-name>
+        <url-pattern>/DeleteGrade</url-pattern>
+    </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
 </web-app>

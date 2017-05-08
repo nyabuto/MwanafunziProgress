@@ -21,46 +21,49 @@ import javax.servlet.http.HttpSession;
  *
  * @author mwamb
  */
-public class UpdateGrade extends HttpServlet {
+public class LoadGrades extends HttpServlet {
 HttpSession session;
-String points_id,points,grade;
-String output;
+String output,points_id,points,grade;
+int position;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-          session=request.getSession();
             dbConn conn = new dbConn();
             
-            points=request.getParameter("points");
-            grade=request.getParameter("grade");
-            points_id=request.getParameter("points_id");
-            grade=grade.replace("_", "+");
+            output="<hr><button style=\"margin-left:80%; width: auto;\" class=\"btn btn-success btn-lg\" id=\"add_grade\">New Grade</button>";
+            output+="<br><br><table id=\"example1\" class=\"table table-bordered table-striped\">";
+            output+="<thead>"
+                    + "<tr>"
+                    + "<th>Position</th>"
+                    + "<th>Points</th>"
+                    + "<th>Grade</th>"
+                    + "<th>Edit</th>"
+                    + "<th>Delete</th>"
+                    + "</tr>"
+                    + "</thead>";
+                    output+="<tbody>";
             
-            System.out.println("points id : "+points_id+" points="+points+" grade :"+grade);   
-            //            check existence of similar record
-        String checker="SELECT points_id FROM points WHERE (points=? OR grade=?) AND points_id!=?";
-        conn.pst=conn.conn.prepareStatement(checker);
-        conn.pst.setString(1, points);
-        conn.pst.setString(2, grade);
-        conn.pst.setString(3, points_id);
-
-        conn.rs=conn.pst.executeQuery();
-        if(conn.rs.next()){
-        //    record exist
-        output="<font color=\"red\"><b>ERROR: Grade already set.</b></font>";
-        }
-        else{
-    
-            String updator="UPDATE points SET points=?, grade=? WHERE points_id=?";
-            conn.pst=conn.conn.prepareStatement(updator);
-            conn.pst.setString(1, points);
-            conn.pst.setString(2, grade);
-            conn.pst.setString(3, points_id);
+            position=0;
             
-            conn.pst.executeUpdate();
-            output="<font color=\"green\"><b>Grade updated successfully.</b></font>";
-        }
+            String getdata="SELECT points_id,points,grade FROM points ORDER BY points DESC";
+            conn.rs=conn.st.executeQuery(getdata);
+            while(conn.rs.next()){
+            points_id= conn.rs.getString(1);
+            points=conn.rs.getString(2);
+            grade=conn.rs.getString(3);
+             position++;
+                output+="<tr>"
+                    + "<input type=\"hidden\" name=\"ival_"+position+"\" id=\"ival_"+position+"\" value=\""+points_id+"\">"
+                    + "<td style=\"width:10%\">"+position+"</td>"
+                    + "<td style=\"width:30%; text-align:center;\"><p id=\"points_"+position+"\">"+points+"</p></td>"
+                    + "<td style=\"width:30%; text-align:center;\"><p id=\"grade_"+position+"\">"+grade+"</p></td>"
+                    + "<td style=\"width:15%\"><button type=\"button\" class=\"btn btn-block btn-warning\" onclick=\"updator_grade("+position+");\" style=\"height:40px; width: 150px\"><b>Edit</b></button></td>"
+                    + "<td style=\"width:15%\"><button type=\"button\" class=\"btn btn-block btn-danger\" onclick=\"deleter_grade("+position+");\" style=\"height:40px; width: 150px\"><b>Delete</b></button></td>"
+                    + "</tr>";  
+            }
+            output+="</tbody>";
+            output+="</table>";
             out.println(output);
         }
     }
@@ -80,7 +83,7 @@ String output;
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(UpdateGrade.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(LoadGrades.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -98,7 +101,7 @@ String output;
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(UpdateGrade.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(LoadGrades.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
